@@ -33,12 +33,7 @@ struct Player {
         else
             fillRandomGrid();
     }
-    pair <unsigned int, unsigned int> getImpact()
-    {
-        if (m_human)
-            return getManualImpact();
-        return getRandomImpact();
-    }
+    virtual pair <unsigned int, unsigned int> getImpact() = 0;
     bool checkImpact (pair <unsigned int, unsigned int> coordinates){
         if (m_grid[coordinates.first][coordinates.second] == '~')
         {
@@ -195,28 +190,6 @@ private :
         getRandomPlace(m_mineSwepper);
         }while (placeShip(m_mineSwepper) == -1);
     }
-    pair <unsigned int, unsigned int> getManualImpact()
-    {
-        cout << "Select your coordinates for your next strike: (row, col) ";
-        cin >> m_lastImpact.first >> m_lastImpact.second;
-        return  m_lastImpact;
-    }
-    pair <unsigned int, unsigned int> getRandomImpact()
-    {
-        if (m_oponentGrid[m_lastImpact.first][m_lastImpact.second] == 'o')
-        {
-            do{
-            m_lastImpact.first += 1;
-            }while (m_oponentGrid[m_lastImpact.first][m_lastImpact.second] != '~');
-        }else
-        {
-            do{
-            m_lastImpact.first = getRandomInt(m_numberRows-1);
-            m_lastImpact.second = getRandomInt(m_numberColumns-1);
-            }while (m_oponentGrid[m_lastImpact.first][m_lastImpact.second] != '~');
-        }
-        return  m_lastImpact;
-    }
 
     std::vector<std::vector<char>> m_grid;
     std::vector<std::vector<char>> m_oponentGrid;
@@ -234,34 +207,26 @@ private :
     const unsigned int m_numberColumns = COLUMNS;
 };
 
-void playerFillGrid(Player t_player)
-{
-    char null;
-    if (t_player.isHuman())
-    {
-        char manual;
-        cout << "\033c \n\n\n\n" <<  t_player.m_ID << ", do you want to fill the grid manually? (y/n)\n";
-        cin >> manual;
-        t_player.fillGrid(manual);
-    }
-}
+struct Human : Player {
 
-void playerTurn(Player t_player)
-{
-    char null;
-    if (t_player.isHuman())
+    virtual pair <unsigned int, unsigned int> getImpact()
     {
-        if (t_player.m_ID != "")
-        {
-            cout << "\033c \n\n\n\n" <<  t_player.m_ID << " press intro when you are ready.\n";
-            cin.get();
-            cin.ignore();
-        }
-        cout << "\033c";
-        t_player.printOponentGrid();
-        cout << "-------------------------------" << endl;
-        t_player.printYourGrid();
+        pair <unsigned int, unsigned int> coordinates;
+        cout << "Select your coordinates for your next strike: (row, col) ";
+        cin >> coordinates.first >> coordinates.second;
+        return  coordinates;
     }
-}
+};
+
+struct NPC : Player {
+
+    virtual pair <unsigned int, unsigned int> getImpact()
+    {
+        pair <unsigned int, unsigned int> coordinates;
+        coordinates.first = getRandomInt(9);
+        coordinates.second = getRandomInt(9);
+        return  coordinates;
+    }
+};
 
 #endif // PLAYER_HPP

@@ -29,6 +29,9 @@ struct gorillaAi {
             m_lastAngle = m_lastAngle ;//- 1*yError;
             std::cout << "Vel: " << m_lastVel << ",\tAngle: " << m_lastAngle << ",\txError: " << xError << ",\tInt: " << m_xErrorI << std::endl;
 
+            if (m_xErrorI >= 300) m_xErrorI = 300;
+            if (m_xErrorI <= -150) m_xErrorI = -150;
+
             if (m_lastVel >= 250) m_lastVel = 250;
             if (m_lastVel <= 15) m_lastVel = 15;
 

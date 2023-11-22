@@ -16,5 +16,6 @@ add_definitions(-DDUELS_BIN_PATH="${DUELS_ROOT}/bin")
 
 # add whatever additional includes / libs needed for your AI
 
-add_executable(gorillas gorillas.cpp)
+add_executable(gorillas gorillas.cpp
+                gorillaAI.hpp)
 target_link_libraries(gorillas ${ZMQ_LIBRARY} yaml-cpp)

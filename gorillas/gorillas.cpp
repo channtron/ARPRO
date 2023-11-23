@@ -5,7 +5,9 @@ using namespace duels::gorillas;
 
 int main(int argc, char** argv)
 {
-  Game game(argc, argv, "Your name here", 0);   // difficulty from 0 to 3
+    auto level{0};
+    if (argc>1) level = *argv[1];
+  Game game(argc, argv, "Your name here", level);   // difficulty from 0 to 3
 
   Input input;
   Feedback feedback;

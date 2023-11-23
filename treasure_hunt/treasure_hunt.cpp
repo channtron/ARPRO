@@ -1,18 +1,21 @@
 #include <duels/treasure_hunt/game.h>
-#include "treasure_hunt_ai.h"
+#include "treasure_hunt_ai_hints.h"
 
 using namespace duels::treasure_hunt;
 
 int main(int argc, char** argv)
 {
   const std::string my_name = "your name";
+  int level{0};
+  if (argc>1) level = int(*argv[1]);
+//  if (argc>2) my_name = std::to_string(*argv[2]);
 
   // AI level can be
   // - 0 (does not move)
   // - 1 (moves randomly)
   // - 2 (tries to always approach the goal)
   // - 3 (uses the proposed algorithm)
-  Game game(argc, argv, my_name, 1);    // to play as player 1 against level 1 AI
+  Game game(argc, argv, my_name, 3);    // to play as player 1 against level 1 AI
   //Game game(argc, argv, my_name, -2);    // to play as player 2 against level 2 AI
 
   Input input;

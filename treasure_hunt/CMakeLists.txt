@@ -17,7 +17,8 @@ add_definitions(-DDUELS_BIN_PATH="${DUELS_ROOT}/bin")
 # add whatever additional includes / libs needed for your AI
 
 add_executable(treasure_hunt treasure_hunt.cpp
-#src/treasure_hunt_ai.cpp       # more difficult
+include/boat_node.h
+include/treasure_hunt_ai_hints.h
 src/treasure_hunt_ai_hints.cpp  # easier starting code
 )
 target_link_libraries(treasure_hunt ${ZMQ_LIBRARY} yaml-cpp)

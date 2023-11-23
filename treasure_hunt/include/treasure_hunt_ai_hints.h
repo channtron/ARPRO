@@ -16,6 +16,7 @@ private:
   Grid map;
 
   std::vector<Vector2D<int>> candidates;
+
   inline void removeCandidate(Vector2D<int> xy)
   {
     const auto pos = std::find(candidates.begin(), candidates.end(), xy);
@@ -33,7 +34,12 @@ private:
       throw std::out_of_range("pruneCandidates: No more treasure candidates: check your erase criterion");
   }
 
-  // do not hesitate to define new methods to avoid having a big computeFrom function
+  // Added variables
+  Orientation getNextOrientation(const BoatNode next);
+  std::vector<std::vector<Orientation>> turnRight{{Orientation::UP,     Orientation::RIGHT},
+                                                  {Orientation::RIGHT,  Orientation::DOWN},
+                                                  {Orientation::DOWN,   Orientation::LEFT},
+                                                  {Orientation::LEFT,   Orientation::UP}};
 
 };
 

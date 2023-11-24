@@ -25,7 +25,8 @@ struct gorillaAi {
             m_xErrorI += xError;
 
 
-            m_lastVel = m_lastVel + 0.3*xError+ 0.05*m_xErrorI + 0.02*(xError-m_Error1);
+//            m_lastVel = m_lastVel + 0.3*xError+ 0.05*m_xErrorI + 0.02*(xError-m_Error1);
+            m_lastVel = m_lastVel + 0.2*xError+ 0.02*(xError-m_Error1) + 0.003*m_xErrorI;
             m_lastAngle = m_lastAngle ;//- 1*yError;
             std::cout << "Vel: " << m_lastVel << ",\tAngle: " << m_lastAngle << ",\txError: " << xError << ",\tInt: " << m_xErrorI << std::endl;
 

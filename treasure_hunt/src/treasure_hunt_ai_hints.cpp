@@ -53,15 +53,19 @@ Action TreasureHuntAI::computeFrom(const Feedback &feedback)
 
   // Function to process feedback.treasure_distance to update candidates
   // as we compare floating points, a smal-l threshold is useful to tell if two values are equal
-  const auto threshold{0.8};
+  const auto threshold{0.7};
   //std::cout << "number of candidates: " << candidates.size() << std::endl;
+  std::cout<< std::endl << "Treasure distance: " << feedback.treasure_distance << std::endl;
   pruneCandidates([&](const Vector2D<int> &candidate)
   {
     // TODO return true if this candidate cannot be the treasure position
-    auto distance = pose.distance(candidate);
+    float distance = pose.distance(candidate);
 //    auto distance = sqrt(pow(candidate.x-pose.x,2)+pow(candidate.y-pose.y,2));
-    if((distance+threshold)>=feedback.treasure_distance
-            && (distance-threshold)<=feedback.treasure_distance)
+
+    std::cout<<"Candidate distance: " << distance << std::endl;
+    if(abs(distance-feedback.treasure_distance)<=threshold)
+        //(distance+threshold)>=feedback.treasure_distance
+            //&& (distance-threshold)<=feedback.treasure_distance)
         return false;
     return true;
   });
@@ -80,11 +84,13 @@ Action TreasureHuntAI::computeFrom(const Feedback &feedback)
 //      if (getNextOrientation(next) == pose.orientation) action = Action::MOVE;
       if (pose.forwardPosition() == next) action = Action::MOVE;
       else {
-          action = Action::TURN_LEFT;
-          for(const auto &orientations : turnRight){
-              if (orientations[0] == pose.orientation && orientations[1] == next.orientation)
-                  action = Action::TURN_RIGHT;
-          }
+          if (next.orientation == pose.orientation.toRight()) action = Action::TURN_RIGHT;
+          else action = Action::TURN_LEFT;
+//          action = Action::TURN_LEFT;
+//          for(const auto &orientations : turnRight){
+//              if (orientations[0] == pose.orientation && orientations[1] == next.orientation)
+//                  action = Action::TURN_RIGHT;
+//          }
           return action;
       }
   }

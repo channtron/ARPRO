@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <maze.h>
 
 typedef struct
 {
@@ -117,7 +118,7 @@ Node *link( Node *n )
 		dest = nodes + x + y * width;
 		
 		//Make sure that destination node is not a wall
-		if ( dest->c == ' ' )
+        if ( dest->c == ' ' )
 		{
 			//If destination is a linked node already - abort
 			if ( dest->parent != NULL ) continue;
@@ -184,6 +185,8 @@ int main( int argc, char **argv )
 		exit( 1 );
 	}
 
+    ecn::Maze maze(height,width);
+
 	//Seed random generator
 	srand( time( NULL ) );
 	
@@ -191,7 +194,7 @@ int main( int argc, char **argv )
 	if ( init( ) )
 	{
 		fprintf( stderr, "%s: out of memory!\n", argv[0] );
-		exit( 1 );
+        exit( 1 );
 	}
 	
 	//Setup start node
@@ -201,5 +204,15 @@ int main( int argc, char **argv )
 	
 	//Connect nodes until start node is reached and can't be left
 	while ( ( last = link( last ) ) != start );
-	draw( );
+    //draw( );
+    for (int i = 0; i < height; i++ )
+    {
+        for (int j = 0; j < width; j++ )
+        {
+            if (nodes[j + i * width].c==' ')
+                maze.dig(j, i);
+        }
+    }
+    maze.save();
+
 }

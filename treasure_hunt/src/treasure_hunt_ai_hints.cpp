@@ -38,7 +38,7 @@ TreasureHuntAI::TreasureHuntAI()
 //    }
 //}
 
-Action TreasureHuntAI::computeFrom(const Feedback &feedback)
+Action TreasureHuntAI::computeFrom(const Feedback &feedback, int verbose)
 {
   // register where we are
   pose.set(feedback.pose);
@@ -55,14 +55,20 @@ Action TreasureHuntAI::computeFrom(const Feedback &feedback)
   // as we compare floating points, a smal-l threshold is useful to tell if two values are equal
   const auto threshold{0.7};
   //std::cout << "number of candidates: " << candidates.size() << std::endl;
-  std::cout<< std::endl << "Treasure distance: " << feedback.treasure_distance << std::endl;
+  if (verbose > 0) {
+      std::cout << "\n---------------------------\n";
+      std::cout << "Bote position: " <<  feedback.pose.x << ", " << feedback.pose.y << std::endl;
+      std::cout << "Treasure distance: " << feedback.treasure_distance << std::endl;
+  }
   pruneCandidates([&](const Vector2D<int> &candidate)
   {
     // TODO return true if this candidate cannot be the treasure position
     float distance = pose.distance(candidate);
 //    auto distance = sqrt(pow(candidate.x-pose.x,2)+pow(candidate.y-pose.y,2));
 
-    std::cout<<"Candidate distance: " << distance << std::endl;
+    if (verbose > 1) std::cout<<"Candidate position: " << candidate.x << ", " << candidate.y << ", distance : " << distance << std::endl;
+    if (candidates.size()==1)
+        return false;
     if(abs(distance-feedback.treasure_distance)<=threshold)
         //(distance+threshold)>=feedback.treasure_distance
             //&& (distance-threshold)<=feedback.treasure_distance)

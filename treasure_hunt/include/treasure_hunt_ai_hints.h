@@ -8,7 +8,7 @@ class TreasureHuntAI
 public:
   TreasureHuntAI();
 
-  Action computeFrom(const Feedback &feedback);
+  Action computeFrom(const Feedback &feedback,int verbose = 0);
 
 
 private:

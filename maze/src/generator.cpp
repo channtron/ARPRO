@@ -5,6 +5,7 @@
 #include <time.h>
 #include <string.h>
 #include <maze.h>
+#include <time.h>
 
 typedef struct
 {
@@ -15,7 +16,7 @@ typedef struct
 } Node;
 
 Node *nodes; //Nodes array
-int width, height; //Maze dimensions
+int width, height, percent; //Maze dimensions
 
 
 int init( )
@@ -156,13 +157,18 @@ void draw( )
 int main( int argc, char **argv )
 {
 	Node *start, *last;
-
+    srand (time(NULL));
 	//Check argument count
 	if ( argc < 3 )
 	{
 		fprintf( stderr, "%s: please specify maze dimensions!\n", argv[0] );
 		exit( 1 );
 	}
+    if ( argc > 3 )
+    {
+        sscanf( argv[3], "%d", &percent );
+    }
+    else percent = 0;
 	
 	//Read maze dimensions from command line arguments
 	if ( sscanf( argv[1], "%d", &width ) + sscanf( argv[2], "%d", &height ) < 2 )
@@ -211,6 +217,9 @@ int main( int argc, char **argv )
         {
             if (nodes[j + i * width].c==' ')
                 maze.dig(j, i);
+            else if ((rand() % 100 + 1) < percent)
+                if (i!=0 && i!=height-1 && j!=0 && j!=width-1)
+                    maze.dig(j, i);
         }
     }
     maze.save();

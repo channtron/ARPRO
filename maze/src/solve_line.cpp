@@ -9,7 +9,7 @@ class Position : public Point
 {
 public:
     // constructor from coordinates
-    Position(int _x, int _y) : Point(_x, _y) {}
+    Position(int _x, int _y, int _distance) : Point(_x, _y) {m_distance=_distance;}
 
     // constructor from base ecn::Point
     Position(ecn::Point _p) : Point(_p.x, _p.y) {}
@@ -17,17 +17,29 @@ public:
     int distToParent()
     {
         // in cell-based motion, the distance to the parent is always 1
-        return 1;
+        return m_distance;
     }
 
     int isCorridor(int incrementX, int incrementY)
     {
         int count = 1;
-        while(this->maze.isFree(this->x+incrementX*count, this->y+incrementY+count))
+        while(maze.isFree(this->x+incrementX*count, this->y+incrementY*count))
         {
             count++;
+            int smallcount = 0;
+            if (maze.isFree(this->x+incrementX*count+1, this->y+incrementY*count)) smallcount++;
+            if (maze.isFree(this->x+incrementX*count-1, this->y+incrementY*count)) smallcount++;
+            if (maze.isFree(this->x+incrementX*count, this->y+incrementY*count+1)) smallcount++;
+            if (maze.isFree(this->x+incrementX*count, this->y+incrementY*count-1)) smallcount++;
+        
+            if (verbose > 3) cout << "\t\t\tnumber of neightbours " << smallcount << endl;  
+            if (smallcount > 2) {
+                count++;
+                break;
+            }  
         }
-        if (count>1) return count;
+        if (verbose > 2) cout << "\t\tdistance to parent " << count-1 << endl;
+        if (count>1) return count-1;
         return -1;
     }
 
@@ -38,21 +50,31 @@ public:
 
         // TODO add free reachable positions from this point
         //generated.reserve(4);
+        if (verbose > 1) cout << "COORDINATES of parent "<< this->x << " " << this->y << endl;
+
         int dist = 0;
-        if (dist = isCorridor(1,0) > 0) generated.emplace_back(std::make_unique<Position>(this->x+dist, this->y));
-        if (dist = isCorridor(-1,0) > 0) generated.emplace_back(std::make_unique<Position>(this->x-dist, this->y));
-        if (dist = isCorridor(0,1) > 0) generated.emplace_back(std::make_unique<Position>(this->x, this->y+dist));
-        if (dist = isCorridor(0,-1) > 0) generated.emplace_back(std::make_unique<Position>(this->x, this->y-dist));
-
-
-
-
-
+        if ((dist = isCorridor(1,0)) > 0) {
+            generated.push_back(Position(this->x+dist, this->y, dist));
+            if (verbose > 2) cout << "\tCOORDINATES of childern "<< this->x+dist << " " << this->y << endl;
+        }
+        if ((dist = isCorridor(-1,0)) > 0) {
+            generated.push_back(Position(this->x-dist, this->y, dist));
+            if (verbose > 2) cout << "\tCOORDINATES of childern "<< this->x-dist << " " << this->y << endl;
+        }
+        if ((dist = isCorridor(0,1)) > 0) {
+            generated.push_back(Position(this->x, this->y+dist, dist));
+            if (verbose > 2) cout << "\tCOORDINATES of childern "<< this->x << " " << this->y+dist << endl;
+        }
+        if ((dist = isCorridor(0,-1)) > 0) {
+            generated.push_back(Position(this->x, this->y-dist, dist));
+            if (verbose > 2) cout << "\tCOORDINATES of childern "<< this->x << " " << this->y-dist << endl;
+        }
+        if (verbose > 1) cout << "number of childern "<< generated.size() << endl;
         return generated;
     }
-    //int m_distance;
+    int m_distance;
+    static constexpr int verbose = 0;
 };
-
 
 
 int main( int argc, char **argv )

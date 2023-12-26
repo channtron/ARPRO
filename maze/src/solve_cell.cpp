@@ -27,15 +27,11 @@ public:
 
         // TODO add free reachable positions from this point
         //generated.reserve(4);
-        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x+1, this->y));
-        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x-1, this->y));
-        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x, this->y+1));
-        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x, this->y-1));
-
-
-
-
-
+        if (maze.isFree(this->x+1, this->y)) generated.push_back(Position(this->x+1, this->y));
+        if (maze.isFree(this->x-1, this->y)) generated.push_back(Position(this->x-1, this->y));
+        if (maze.isFree(this->x, this->y+1)) generated.push_back(Position(this->x, this->y+1));
+        if (maze.isFree(this->x, this->y-1)) generated.push_back(Position(this->x, this->y-1));
+        
         return generated;
     }
 };

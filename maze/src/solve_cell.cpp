@@ -26,8 +26,11 @@ public:
         std::vector<Position> generated;
 
         // TODO add free reachable positions from this point
-
-
+        //generated.reserve(4);
+        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x+1, this->y));
+        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x-1, this->y));
+        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x, this->y+1));
+        if (this->maze.isFree(this->x+1, this->y)) generated.emplace_back(std::make_unique<Position>(this->x, this->y-1));
 
 
 

@@ -217,7 +217,7 @@ int main( int argc, char **argv )
         {
             if (nodes[j + i * width].c==' ')
                 maze.dig(j, i);
-            else if ((rand() % 100 + 1) < percent)
+            else if ((rand() % 100 + 1) <= percent)
                 if (i!=0 && i!=height-1 && j!=0 && j!=width-1)
                     maze.dig(j, i);
         }
